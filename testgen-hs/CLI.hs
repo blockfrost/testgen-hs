@@ -61,45 +61,40 @@ opts =
 commandParser :: Parser Command
 commandParser =
   subparser
-    ( mempty
-        <> ( command
-               "generate"
-               ( info
-                   ( Generate
-                       <$> optionsParser
-                         <**> helper
-                   )
-                   (progDesc "Generate random CBOR test cases")
-               )
-           )
-        <> ( command
-               "deserialize"
-               ( info
-                   ( Deserialize
-                       <$> argument (eitherReader parseHex) (metavar "CBOR_HEX")
-                         <**> helper
-                   )
-                   (progDesc "Deserialize CBOR of ‘HardForkApplyTxErr’ that you got from cardano-node")
-               )
-           )
-        <> ( command
-               "deserialize-stream"
-               ( info
-                   ( pure DeserializeStream
-                       <**> helper
-                   )
-                   (progDesc "Deserialize an STDIN stream of multiple lines of base16-encoded CBOR of ‘HardForkApplyTxErr’")
-               )
-           )
-        <> ( command
-               "evaluate-stream"
-               ( info
-                   ( pure EvaluateStream
-                       <**> helper
-                   )
-                   (progDesc "Evaluate an STDIN stream of Txs with Utxos")
-               )
-           )
+    ( command
+        "generate"
+        ( info
+            ( Generate
+                <$> optionsParser
+                  <**> helper
+            )
+            (progDesc "Generate random CBOR test cases")
+        )
+        <> command
+          "deserialize"
+          ( info
+              ( Deserialize
+                  <$> argument (eitherReader parseHex) (metavar "CBOR_HEX")
+                    <**> helper
+              )
+              (progDesc "Deserialize CBOR of 'HardForkApplyTxErr' that you got from cardano-node")
+          )
+        <> command
+          "deserialize-stream"
+          ( info
+              ( pure DeserializeStream
+                  <**> helper
+              )
+              (progDesc "Deserialize an STDIN stream of multiple lines of base16-encoded CBOR of 'HardForkApplyTxErr'")
+          )
+        <> command
+          "evaluate-stream"
+          ( info
+              ( pure EvaluateStream
+                  <**> helper
+              )
+              (progDesc "Evaluate an STDIN stream of Txs with Utxos")
+          )
     )
 
 optionsParser :: Parser GenerateOptions
@@ -122,7 +117,7 @@ optionsParser =
                   <> short 'g'
                   <> metavar "SIZE"
                   <> value 300
-                  <> help "Set the relative ‘size’ of the test cases"
+                  <> help "Set the relative 'size' of the test cases"
               )
         )
     <*> ( NumCases
@@ -147,8 +142,7 @@ positive = do
 typeCommandParser :: Parser TypeCommand
 typeCommandParser =
   subparser
-    ( mempty
-        <> mkTypeCommand Tx'ConwayDummy
+    ( mkTypeCommand Tx'ConwayDummy
         <> mkTypeCommand ApplyTxErr'Byron
         <> mkTypeCommand ApplyTxErr'Shelley
         <> mkTypeCommand ApplyTxErr'Allegra

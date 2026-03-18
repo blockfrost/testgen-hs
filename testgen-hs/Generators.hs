@@ -192,13 +192,12 @@ instance OurCBOR Tx'Conway where
 ------- HardForkApplyTxErr -----------------------------------------------------
 
 hfcEnvelope :: OCHCM.HardForkApplyTxErr (OCCB.CardanoEras OCCB.StandardCrypto) -> C.Encoding
-hfcEnvelope wrapped =
+hfcEnvelope =
   OCNS.encodeNodeToClient
     @(OCCB.HardForkBlock (OCCB.CardanoEras OCCB.StandardCrypto))
     @(OCHCM.HardForkApplyTxErr (OCCB.CardanoEras OCCB.StandardCrypto))
     codecConfig
     OCCN.CardanoNodeToClientVersion12
-    wrapped
   where
     byronEpochSlots = CCS.EpochSlots 21600 -- probably safe to hardcode in Conway…?
     codecConfig = OCNPI.pClientInfoCodecConfig (OCCN.protocolClientInfoCardano byronEpochSlots)
