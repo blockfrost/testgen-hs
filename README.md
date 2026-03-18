@@ -285,8 +285,9 @@ support you need [`direnv`](https://direnv.net/) with
 installation instructions.
 
 The instructions below use VS Code as an example, but any editor with LSP and
-`direnv` support (Neovim, Emacs, etc.) works – just configure it to use the
-`haskell-language-server` binary from `PATH` rather than a bundled one.
+`direnv` support (Neovim, Emacs, etc.) works the same way. The devshell puts
+both `haskell-language-server` and `haskell-language-server-wrapper` on
+`PATH`, so most editors should pick up HLS automatically.
 
 ### VS Code example
 
@@ -298,6 +299,13 @@ The instructions below use VS Code as an example, but any editor with LSP and
 
    ```json
    { "haskell.manageHLS": "PATH" }
+   ```
+
+   Optionally, enable semantic highlighting (richer colours for types,
+   type variables, etc.):
+
+   ```json
+   { "haskell.plugin.semanticTokens.globalOn": true }
    ```
 
 3. Allow direnv for this project and restart HLS:
