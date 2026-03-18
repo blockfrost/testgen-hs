@@ -77,8 +77,8 @@ genTxUTxO = do
   pure (tx, stubUTxO tx)
 
 eval'Conway ::
-  (Cardano.Ledger.Core.Tx (Cardano.Ledger.Api.Era.ConwayEra)) ->
-  UTxO (Cardano.Ledger.Api.Era.ConwayEra) ->
+  Cardano.Ledger.Core.Tx Cardano.Ledger.Api.Era.ConwayEra ->
+  UTxO Cardano.Ledger.Api.Era.ConwayEra ->
   EpochInfo (Either Text) ->
   SystemStart ->
   J.Value
@@ -87,17 +87,17 @@ eval'Conway tx utxo epochInfo systemStart =
     Just v -> v
     Nothing -> error "ogmiosSuccess produced invalid JSON"
   where
-    redeemerReport :: RedeemerReport (Cardano.Ledger.Api.Era.ConwayEra)
+    redeemerReport :: RedeemerReport Cardano.Ledger.Api.Era.ConwayEra
     redeemerReport = evalTxExUnits protocolParams tx utxo epochInfo systemStart
 
 -- | Version of eval'Conway that uses dummy epoch info and system start
-eval'ConwayDummy :: (Cardano.Ledger.Core.Tx (Cardano.Ledger.Api.Era.ConwayEra)) -> UTxO Cardano.Ledger.Api.Era.ConwayEra -> J.Value
+eval'ConwayDummy :: Cardano.Ledger.Core.Tx Cardano.Ledger.Api.Era.ConwayEra -> UTxO Cardano.Ledger.Api.Era.ConwayEra -> J.Value
 eval'ConwayDummy tx utxo =
   case J.decode (AesonEncoding.encodingToLazyByteString (ogmiosSuccess redeemerReport)) of
     Just v -> v
     Nothing -> error "ogmiosSuccess produced invalid JSON"
   where
-    redeemerReport :: RedeemerReport (Cardano.Ledger.Api.Era.ConwayEra)
+    redeemerReport :: RedeemerReport Cardano.Ledger.Api.Era.ConwayEra
     redeemerReport = evalTxExUnits protocolParams tx utxo dummyEpochInfo dummySystemStart
 
 -- | Collect every input the Tx spends, in any role.
@@ -137,7 +137,7 @@ dummySystemStart =
 protocolParamsJSON :: BS.ByteString
 protocolParamsJSON = $(embedFile =<< makeRelativeToProject "protocol-params-preview.json")
 
-protocolParams :: PParams (Cardano.Ledger.Api.Era.ConwayEra)
+protocolParams :: PParams Cardano.Ledger.Api.Era.ConwayEra
 protocolParams =
   case eitherDecodeStrict' protocolParamsJSON of
     Left err -> error $ "Embedded protocol-parameters JSON is malformed:\n" <> err
