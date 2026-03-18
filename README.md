@@ -297,7 +297,11 @@ The instructions below use VS Code as an example, but any editor with LSP and
    instead of managing its own. Add this to your VS Code settings:
 
    ```json
-   { "haskell.manageHLS": "PATH" }
+   {
+     "haskell.manageHLS": "PATH",
+     "haskell.serverExecutablePath": "haskell-language-server",
+     "haskell.plugin.semanticTokens.globalOn": true
+   }
    ```
 
 3. Allow direnv for this project and restart HLS:
