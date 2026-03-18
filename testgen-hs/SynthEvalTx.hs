@@ -42,7 +42,7 @@ import Data.Aeson
 import qualified Data.Aeson as J
 import qualified Data.Aeson.Encoding as AesonEncoding
 import qualified Data.ByteString as BS
-import Data.FileEmbed (embedFile)
+import Data.FileEmbed (embedFile, makeRelativeToProject)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Data.Text (Text)
@@ -135,7 +135,7 @@ dummySystemStart =
   SystemStart $ UTCTime (fromGregorian 2020 7 29) (secondsToDiffTime 0)
 
 protocolParamsJSON :: BS.ByteString
-protocolParamsJSON = $(embedFile "protocol-params-preview.json")
+protocolParamsJSON = $(embedFile =<< makeRelativeToProject "protocol-params-preview.json")
 
 protocolParams :: PParams (Cardano.Ledger.Api.Era.ConwayEra)
 protocolParams =
