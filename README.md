@@ -275,3 +275,39 @@ And then easily reproduce it by providing the same seed that was found:
 {"cbor":"8182068182028200a0","haskellRepr":"ApplyTxError (ConwayCertsFailure (WithdrawalsNotInRewardsCERTS (fromList [])) :| [])","json":{"contents":{"contents":{"contents":{"era":"ShelleyBasedEraConway","error":["ConwayCertsFailure (WithdrawalsNotInRewardsCERTS (fromList []))"],"kind":"ShelleyTxValidationError"},"tag":"TxValidationErrorInCardanoMode"},"tag":"TxCmdTxSubmitValidationError"},"tag":"TxSubmitFail"},"typeTag":"ApplyTxError (ConwayEra StandardCrypto)"}
 {"cbor":"81820681820481581cc0231342a5c66b25d652a7116559d02cbe9515ef890fd698de38d456","haskellRepr":"ApplyTxError (ConwayWdrlNotDelegatedToDRep (KeyHash {unKeyHash = \"c0231342a5c66b25d652a7116559d02cbe9515ef890fd698de38d456\"} :| []) :| [])","json":{"contents":{"contents":{"contents":{"era":"ShelleyBasedEraConway","error":["ConwayWdrlNotDelegatedToDRep (KeyHash {unKeyHash = \"c0231342a5c66b25d652a7116559d02cbe9515ef890fd698de38d456\"} :| [])"],"kind":"ShelleyTxValidationError"},"tag":"TxValidationErrorInCardanoMode"},"tag":"TxCmdTxSubmitValidationError"},"tag":"TxSubmitFail"},"typeTag":"ApplyTxError (ConwayEra StandardCrypto)"}
 ```
+
+## Development – HLS setup
+
+This project provides a Nix devshell with GHC and HLS. To get full IDE
+support you need [`direnv`](https://direnv.net/) with
+[`nix-direnv`](https://github.com/nix-community/nix-direnv) so that the
+`.envrc` is picked up automatically. See their official documentation for
+installation instructions.
+
+The instructions below use VS Code as an example, but any editor with LSP and
+`direnv` support (Neovim, Emacs, etc.) works -- just configure it to use the
+`haskell-language-server` binary from `PATH` rather than a bundled one.
+
+### VS Code example
+
+1. Install the extensions **Haskell** (`haskell.haskell`) and **direnv**
+   (`mkhl.direnv`).
+
+2. Tell the Haskell extension to use the HLS provided by the devshell
+   instead of managing its own. Add this to your VS Code settings:
+
+   ```json
+   { "haskell.manageHLS": "PATH" }
+   ```
+
+3. Allow direnv for this project and restart HLS:
+
+   ```
+   direnv allow
+   ```
+
+   Then in VS Code: `Ctrl+Shift+P` -> _Haskell: Restart Haskell LSP Server_.
+
+> **Note:** The first HLS session takes roughly 10 minutes while `hie-bios`
+> builds all dependencies via `cabal v2-repl`. Subsequent loads use the
+> cache at `~/.cache/hie-bios/`.
