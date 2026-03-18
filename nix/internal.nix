@@ -158,6 +158,17 @@ in rec {
     findInput = pred: label:
       lib.findFirst pred (throw "devshell input '${label}' not found") cardano-node-inputs;
 
+    haskell-language-server = findInput (p: (p.pname or "") == "haskell-language-server-exe-haskell-language-server") "haskell-language-server";
+
+    # Shim so that editors looking for haskell-language-server-wrapper find it
+    # on PATH; the devshell already sets the correct GHC.
+    haskell-language-server-wrapper = pkgs.writeShellApplication {
+      name = "haskell-language-server-wrapper";
+      text = ''
+        exec ${lib.getExe haskell-language-server} "$@"
+      '';
+    };
+
     # numtide/devshell does not run stdenv setup hooks, so env vars that
     # mkShell would set (e.g. PKG_CONFIG_PATH) are missing.
     # PKG_CONFIG_PATH is critical: without it the cabal solver cannot
@@ -270,12 +281,15 @@ in rec {
         }
         {
           name = "haskell-language-server";
-          package = findInput (p: (p.pname or "") == "haskell-language-server-exe-haskell-language-server") "hls";
+          package = haskell-language-server;
           category = "haskell";
         }
       ];
       devshell = {
-        packages = [cardano-node-env];
+        packages = [
+          cardano-node-env
+          haskell-language-server-wrapper
+        ];
         startup.rewrite-cabal-project.text = let
           chap-store-path = toString cardano-node-flake'.inputs.CHaP;
         in ''
