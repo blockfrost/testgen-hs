@@ -55,6 +55,8 @@
 
         devshells.default = internal.devShell.new;
 
+        checks.hlint = internal.hlintCheck;
+
         treefmt = {pkgs, ...}: {
           projectRootFile = "flake.nix";
           programs = {

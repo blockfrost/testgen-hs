@@ -123,6 +123,17 @@ assert builtins.elem targetSystem ["x86_64-linux" "aarch64-linux" "aarch64-darwi
       };
     })
     .defaultNix;
+  cardano-node-devshell = cardano-node-flake'.devShells.${buildSystem}.default;
+  cardano-node-inputs = lib.filter lib.isDerivation (
+    (cardano-node-devshell.buildInputs or [])
+    ++ (cardano-node-devshell.nativeBuildInputs or [])
+    ++ (cardano-node-devshell.propagatedBuildInputs or [])
+    ++ (cardano-node-devshell.propagatedNativeBuildInputs or [])
+  );
+  # Extract an individual package from the cardano-node devshell inputs
+  # so we can expose it as a devshell command with its own menu entry.
+  cardano-node-findInput = pred: label:
+    lib.findFirst pred (throw "devshell input '${label}' not found") cardano-node-inputs;
 in rec {
   defaultPackage = testgen-hs;
   cardano-node-flake = cardano-node-flake';
@@ -139,24 +150,12 @@ in rec {
   inherit (cardano-node-packages) cardano-node cardano-cli;
 
   devShell = let
-    cardano-node-devshell = cardano-node-flake.devShells.${buildSystem}.default;
-    cardano-node-inputs = lib.filter lib.isDerivation (
-      (cardano-node-devshell.buildInputs or [])
-      ++ (cardano-node-devshell.nativeBuildInputs or [])
-      ++ (cardano-node-devshell.propagatedBuildInputs or [])
-      ++ (cardano-node-devshell.propagatedNativeBuildInputs or [])
-    );
     cardano-node-env = pkgs.buildEnv {
       name = "cardano-node-devshell-env";
       paths = cardano-node-inputs;
       ignoreCollisions = true;
     };
     cardano-node-ghc-libdir = cardano-node-devshell.NIX_GHC_LIBDIR or "";
-
-    # Extract an individual package from the cardano-node devshell inputs
-    # so we can expose it as a devshell command with its own menu entry.
-    findInput = pred: label:
-      lib.findFirst pred (throw "devshell input '${label}' not found") cardano-node-inputs;
 
     # numtide/devshell does not run stdenv setup hooks, so env vars that
     # mkShell would set (e.g. PKG_CONFIG_PATH) are missing.
@@ -260,17 +259,22 @@ in rec {
       commands = [
         {
           name = "ghc";
-          package = findInput (p: lib.hasPrefix "ghc-shell-for-packages" (p.name or "")) "ghc";
+          package = cardano-node-findInput (p: lib.hasPrefix "ghc-shell-for-packages" (p.name or "")) "ghc";
           category = "haskell";
         }
         {
           name = "cabal";
-          package = findInput (p: (p.pname or "") == "cabal-install-exe-cabal") "cabal";
+          package = cardano-node-findInput (p: (p.pname or "") == "cabal-install-exe-cabal") "cabal";
           category = "haskell";
         }
         {
           name = "haskell-language-server";
-          package = findInput (p: (p.pname or "") == "haskell-language-server-exe-haskell-language-server") "hls";
+          package = cardano-node-findInput (p: (p.pname or "") == "haskell-language-server-exe-haskell-language-server") "hls";
+          category = "haskell";
+        }
+        {
+          name = "hlint";
+          package = cardano-node-findInput (p: (p.pname or "") == "hlint-exe-hlint") "hlint";
           category = "haskell";
         }
       ];
@@ -327,6 +331,17 @@ in rec {
     .${
       targetSystem
     };
+
+  hlintCheck = let
+    hlint = cardano-node-findInput (p: (p.pname or "") == "hlint-exe-hlint") "hlint";
+  in
+    pkgs.runCommand "hlint" {
+      nativeBuildInputs = [hlint];
+      src = ../testgen-hs;
+    } ''
+      hlint "$src"
+      touch $out
+    '';
 
   nix-bundle-exe = import inputs.nix-bundle-exe {inherit pkgs;};
 
