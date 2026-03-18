@@ -285,7 +285,7 @@ support you need [`direnv`](https://direnv.net/) with
 installation instructions.
 
 The instructions below use VS Code as an example, but any editor with LSP and
-`direnv` support (Neovim, Emacs, etc.) works -- just configure it to use the
+`direnv` support (Neovim, Emacs, etc.) works – just configure it to use the
 `haskell-language-server` binary from `PATH` rather than a bundled one.
 
 ### VS Code example
@@ -306,7 +306,7 @@ The instructions below use VS Code as an example, but any editor with LSP and
    direnv allow
    ```
 
-   Then in VS Code: `Ctrl+Shift+P` -> _Haskell: Restart Haskell LSP Server_.
+   Then in VS Code: `Ctrl+Shift+P` → _Haskell: Restart Haskell LSP Server_.
 
 > **Note:** The first HLS session takes roughly 10 minutes while `hie-bios`
 > builds all dependencies via `cabal v2-repl`. Subsequent loads use the
