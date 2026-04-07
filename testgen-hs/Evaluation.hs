@@ -110,7 +110,7 @@ eval'Conway pparams tx utxo epochInfo systemStart =
             (purpose, exUnits) : _ ->
               Map.singleton purpose (Right exUnits)
             [] ->
-              error "Empty redeemer report from evalTxExUnits"
+              Map.empty
       where
         (failures, successes) = Map.foldrWithKey groupReports (Map.empty, Map.empty) report
 
