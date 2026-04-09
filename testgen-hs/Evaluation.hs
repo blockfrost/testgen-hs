@@ -93,4 +93,3 @@ eval'Conway pparams tx utxo epochInfo systemStart =
   where
     report :: RedeemerReport ConwayEra
     report = evalTxExUnits pparams tx utxo epochInfo systemStart
-
