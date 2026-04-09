@@ -237,8 +237,9 @@ in rec {
             printf '%s\n' "$_new" > "$PWD/cabal.project"
           fi
 
-          _chap_marker="$CABAL_DIR/.chap-store-path"
+          _chap_marker="$CABAL_DIR/.chap-index-id"
           if [ ! -e "$_chap_marker" ] || [ "$(cat "$_chap_marker")" != "${chap-store-path}" ]; then
+            rm -rf "$CABAL_DIR/packages/cardano-haskell-packages"
             mkdir -p "$CABAL_DIR/packages/cardano-haskell-packages"
             cabal update cardano-haskell-packages 2>/dev/null
             printf '%s' '${chap-store-path}' >"$_chap_marker"
@@ -302,10 +303,14 @@ in rec {
             printf '%s\n' "$_new" > "$PRJ_ROOT/cabal.project"
           fi
           # Re-index the local CHaP only when the underlying Nix store
-          # path changes (i.e. after a flake.lock update).  A marker
+          # path changes (i.e. after a flake.lock update). A marker
           # file records the store path that was last indexed.
-          _chap_marker="$CABAL_DIR/.chap-store-path"
+          _chap_marker="$CABAL_DIR/.chap-index-id"
           if [ ! -e "$_chap_marker" ] || [ "$(cat "$_chap_marker")" != "${chap-store-path}" ]; then
+            # We delete the old cache first because cabal's incremental
+            # update does not always rebuild the uncompressed index tar
+            # from the new tar.gz, leaving a stale 01-index.tar behind.
+            rm -rf "$CABAL_DIR/packages/cardano-haskell-packages"
             mkdir -p "$CABAL_DIR/packages/cardano-haskell-packages"
             cabal update cardano-haskell-packages 2>/dev/null
             printf '%s' '${chap-store-path}' >"$_chap_marker"
