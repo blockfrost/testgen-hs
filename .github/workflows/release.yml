@@ -42,10 +42,6 @@ jobs:
             result-archive-aarch64-darwin \
             .#hydraJobs.testgen-hs.aarch64-darwin
 
-          nix build -L --builders '' --max-jobs 0 --out-link \
-            result-archive-x86_64-darwin \
-            .#hydraJobs.testgen-hs.x86_64-darwin
-
           find -L result-*
       - name: Upload release artifacts
         uses: softprops/action-gh-release@v2
@@ -53,6 +49,5 @@ jobs:
           files: |
             result-archive-x86_64-linux/*.tar.bz2
             result-archive-aarch64-linux/*.tar.bz2
-            result-archive-x86_64-darwin/*.tar.bz2
             result-archive-aarch64-darwin/*.tar.bz2
             result-archive-x86_64-windows/*.zip
