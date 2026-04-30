@@ -41,7 +41,7 @@
           targetSystem: import ./nix/internal.nix {inherit inputs targetSystem;}
         );
 
-      systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin"];
+      systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin"];
       perSystem = {system, ...}: let
         internal = inputs.self.internal.${system};
       in {
