@@ -24,7 +24,6 @@ jobs:
           nix build --builders "" --max-jobs 0 .#hydraJobs.testgen-hs.x86_64-linux   && cp result/testgen-hs-*.* .
           nix build --builders "" --max-jobs 0 .#hydraJobs.testgen-hs.aarch64-linux  && cp result/testgen-hs-*.* .
           nix build --builders "" --max-jobs 0 .#hydraJobs.testgen-hs.x86_64-windows && cp result/testgen-hs-*.* .
-          nix build --builders "" --max-jobs 0 .#hydraJobs.testgen-hs.x86_64-darwin  && cp result/testgen-hs-*.* .
           nix build --builders "" --max-jobs 0 .#hydraJobs.testgen-hs.aarch64-darwin && cp result/testgen-hs-*.* .
       - name: Read Version
         run: |
@@ -37,12 +36,6 @@ jobs:
         with:
           name: testgen-hs-${{ env.version }}-aarch64-darwin.tar.bz2
           path: testgen-hs-${{ env.version }}-aarch64-darwin.tar.bz2
-          if-no-files-found: error
-      - name: Upload Artifact (x86_64-darwin)
-        uses: actions/upload-artifact@v4
-        with:
-          name: testgen-hs-${{ env.version }}-x86_64-darwin.tar.bz2
-          path: testgen-hs-${{ env.version }}-x86_64-darwin.tar.bz2
           if-no-files-found: error
       - name: Upload Artifact (x86_64-linux)
         uses: actions/upload-artifact@v4
