@@ -1,8 +1,8 @@
 diff --git a/nix/haskell.nix b/nix/haskell.nix
-index 52a57b06bb..5e84f31753 100644
+index 37bfd2951d..cf82e63384 100644
 --- a/nix/haskell.nix
 +++ b/nix/haskell.nix
-@@ -122,6 +122,18 @@ let
+@@ -146,6 +146,18 @@ let
        #
        modules =
          [

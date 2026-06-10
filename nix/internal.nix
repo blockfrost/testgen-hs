@@ -42,7 +42,7 @@ assert builtins.elem targetSystem ["x86_64-linux" "aarch64-linux" "aarch64-darwi
       owner = "IntersectMBO";
       repo = "cardano-ledger";
       rev = dep-tag;
-      hash = "sha256-RvnNYY76OhRuC/uP5Lr+HLEKWyMHCWxx+10HlPrH6mQ=";
+      hash = "sha256-BgeRHvwhrtDnce4nGRd/S/PME8uD3Pxrb5rXe7sMlqw=";
     };
   patched-cardano-ledger-src = pkgs.runCommandNoCC "cardano-ledger-src-patched" {} ''
     cp -r ${cardano-ledger-src} $out
@@ -289,6 +289,7 @@ in rec {
           package = cardano-node-findInput (p: (p.pname or "") == "hlint-exe-hlint") "hlint";
           category = "haskell";
         }
+        {package = inputs.self.formatter.${pkgs.stdenv.hostPlatform.system};}
       ];
       devshell = {
         packages = [

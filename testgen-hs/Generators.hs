@@ -9,6 +9,7 @@ import qualified Cardano.Binary
 import qualified Cardano.Chain.Slotting as CCS
 import qualified Cardano.Ledger.Api.Era
 import qualified Cardano.Ledger.Api.UTxO
+import Cardano.Ledger.Core (TopTx)
 import qualified Cardano.Ledger.Core
 import qualified Cardano.TxSubmit.Types as CTT
 import qualified Codec.CBOR.Encoding as C
@@ -167,7 +168,7 @@ instance OurCBOR ApplyTxErr'Conway where
 
 newtype Tx'Conway
   = Tx'Conway
-      ( Cardano.Ledger.Core.Tx Cardano.Ledger.Api.Era.ConwayEra,
+      ( Cardano.Ledger.Core.Tx TopTx Cardano.Ledger.Api.Era.ConwayEra,
         Cardano.Ledger.Api.UTxO.UTxO Cardano.Ledger.Api.Era.ConwayEra
       )
   deriving newtype (Eq, Show)

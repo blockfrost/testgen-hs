@@ -18,6 +18,7 @@ import Cardano.Ledger.Api (ConwayEra, PParams, TransactionScriptFailure)
 import qualified Cardano.Ledger.Api as Ledger
 import Cardano.Ledger.Api.Tx (RedeemerReport, Tx)
 import Cardano.Ledger.Api.UTxO (UTxO (..))
+import Cardano.Ledger.Core (TopTx)
 import Cardano.Slotting.EpochInfo (EpochInfo)
 import Cardano.Slotting.Slot ()
 import Cardano.Slotting.Time (SystemStart (..))
@@ -80,7 +81,7 @@ writeJson _ (Seed seed) (GenSize size) (NumCases numCases) = do
 
 eval'Conway ::
   PParams ConwayEra ->
-  Tx ConwayEra ->
+  Tx TopTx ConwayEra ->
   UTxO ConwayEra ->
   EpochInfo (Either Text) ->
   SystemStart ->

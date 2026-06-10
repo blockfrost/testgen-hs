@@ -32,7 +32,6 @@ import qualified Cardano.Ledger.Hashes as Hashes
 import Cardano.Ledger.Plutus
   ( TxOutSource (..),
   )
-import qualified Cardano.Ledger.Plutus.Language as Ledger
 import qualified Cardano.Ledger.TxIn as Ledger
 import qualified Codec.CBOR.Read as Cbor
 import qualified Data.Aeson as A
