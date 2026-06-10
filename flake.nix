@@ -69,6 +69,10 @@
             ruff-format.enable = true; # Python
             yamlfmt.enable = pkgs.system != "x86_64-darwin"; # a treefmt-nix+yamlfmt bug on Intel Macs
           };
+          settings.global.excludes = [
+            "LICENSE"
+            "*.diff"
+          ];
         };
       };
 

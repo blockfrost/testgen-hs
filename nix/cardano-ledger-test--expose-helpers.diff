@@ -1,5 +1,5 @@
 diff --git a/src/Test/Cardano/Ledger/Generic/GenState.hs b/src/Test/Cardano/Ledger/Generic/GenState.hs
-index a4a0d8f86..4020fd005 100644
+index ad568c2b6e..63756ffc8f 100644
 --- a/src/Test/Cardano/Ledger/Generic/GenState.hs
 +++ b/src/Test/Cardano/Ledger/Generic/GenState.hs
 @@ -74,6 +74,8 @@ module Test.Cardano.Ledger.Generic.GenState (

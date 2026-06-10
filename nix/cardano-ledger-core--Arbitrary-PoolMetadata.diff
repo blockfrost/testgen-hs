@@ -1,8 +1,8 @@
 diff --git a/testlib/Test/Cardano/Ledger/Core/Arbitrary.hs b/testlib/Test/Cardano/Ledger/Core/Arbitrary.hs
-index 0da03786f..patched 100644
+index 13fbfad290..1ebcf907bd 100644
 --- a/testlib/Test/Cardano/Ledger/Core/Arbitrary.hs
 +++ b/testlib/Test/Cardano/Ledger/Core/Arbitrary.hs
-@@ -91,6 +91,8 @@ import Control.Monad (replicateM)
+@@ -91,6 +91,8 @@ import Cardano.Ledger.TxIn (TxId (..), TxIn (..))
  import Control.Monad (replicateM)
  import Control.Monad.Identity (Identity)
  import Control.Monad.Trans.Fail.String (errorFail)
