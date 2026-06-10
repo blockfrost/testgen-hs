@@ -9,8 +9,8 @@ import qualified Cardano.Binary
 import qualified Cardano.Chain.Slotting as CCS
 import qualified Cardano.Ledger.Api.Era
 import qualified Cardano.Ledger.Api.UTxO
-import qualified Cardano.Ledger.Core
 import Cardano.Ledger.Core (TopTx)
+import qualified Cardano.Ledger.Core
 import qualified Cardano.TxSubmit.Types as CTT
 import qualified Codec.CBOR.Encoding as C
 import Codec.Serialise (Serialise)

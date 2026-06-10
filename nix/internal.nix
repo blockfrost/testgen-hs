@@ -289,6 +289,7 @@ in rec {
           package = cardano-node-findInput (p: (p.pname or "") == "hlint-exe-hlint") "hlint";
           category = "haskell";
         }
+        {package = inputs.self.formatter.${pkgs.stdenv.hostPlatform.system};}
       ];
       devshell = {
         packages = [

@@ -26,8 +26,8 @@ import Cardano.Ledger.Api.Tx.Out
 import Cardano.Ledger.Api.UTxO (UTxO (..))
 import Cardano.Ledger.BaseTypes (Network (..))
 import Cardano.Ledger.Coin (Coin (..))
-import qualified Cardano.Ledger.Core
 import Cardano.Ledger.Core (TopTx)
+import qualified Cardano.Ledger.Core
 import Cardano.Ledger.Credential
   ( Credential (KeyHashObj),
     StakeReference (StakeRefNull),
