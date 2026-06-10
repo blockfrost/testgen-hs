@@ -5,7 +5,7 @@ synopsis:
   CBOR test case generator and deserializer for cross-checking other implementations
 
 -- Version tracks cardano-node, adding a patch segment:
-version:       10.6.3.1
+version:       11.0.1.1
 
 executable testgen-hs
   main-is:            Main.hs
@@ -36,8 +36,8 @@ executable testgen-hs
     , microlens
     , optparse-applicative
     , ouroboros-consensus
-    , ouroboros-consensus-cardano
-    , ouroboros-consensus-cardano:unstable-cardano-testlib
+    , ouroboros-consensus:cardano
+    , ouroboros-consensus:unstable-cardano-testlib
     , plutus-core
     , plutus-ledger-api
     , prettyprinter

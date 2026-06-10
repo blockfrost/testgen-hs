@@ -27,6 +27,7 @@ import Cardano.Ledger.Api.UTxO (UTxO (..))
 import Cardano.Ledger.BaseTypes (Network (..))
 import Cardano.Ledger.Coin (Coin (..))
 import qualified Cardano.Ledger.Core
+import Cardano.Ledger.Core (TopTx)
 import Cardano.Ledger.Credential
   ( Credential (KeyHashObj),
     StakeReference (StakeRefNull),
@@ -69,7 +70,7 @@ _registerPlutus tag ok scr = do
 
 genTxUTxO ::
   QC.Gen
-    ( Cardano.Ledger.Core.Tx Cardano.Ledger.Api.Era.ConwayEra,
+    ( Cardano.Ledger.Core.Tx TopTx Cardano.Ledger.Api.Era.ConwayEra,
       Cardano.Ledger.Api.UTxO.UTxO Cardano.Ledger.Api.Era.ConwayEra
     )
 genTxUTxO = do
@@ -77,7 +78,7 @@ genTxUTxO = do
   pure (tx, stubUTxO tx)
 
 eval'Conway ::
-  Cardano.Ledger.Core.Tx Cardano.Ledger.Api.Era.ConwayEra ->
+  Cardano.Ledger.Core.Tx TopTx Cardano.Ledger.Api.Era.ConwayEra ->
   UTxO Cardano.Ledger.Api.Era.ConwayEra ->
   EpochInfo (Either Text) ->
   SystemStart ->
@@ -91,7 +92,7 @@ eval'Conway tx utxo epochInfo systemStart =
     redeemerReport = evalTxExUnits protocolParams tx utxo epochInfo systemStart
 
 -- | Version of eval'Conway that uses dummy epoch info and system start
-eval'ConwayDummy :: Cardano.Ledger.Core.Tx Cardano.Ledger.Api.Era.ConwayEra -> UTxO Cardano.Ledger.Api.Era.ConwayEra -> J.Value
+eval'ConwayDummy :: Cardano.Ledger.Core.Tx TopTx Cardano.Ledger.Api.Era.ConwayEra -> UTxO Cardano.Ledger.Api.Era.ConwayEra -> J.Value
 eval'ConwayDummy tx utxo =
   case J.decode (AesonEncoding.encodingToLazyByteString (ogmiosSuccess redeemerReport)) of
     Just v -> v
@@ -101,7 +102,7 @@ eval'ConwayDummy tx utxo =
     redeemerReport = evalTxExUnits protocolParams tx utxo dummyEpochInfo dummySystemStart
 
 -- | Collect every input the Tx spends, in any role.
-allTxIns :: (BabbageEraTxBody era, EraTx era) => Tx era -> Set.Set TxIn
+allTxIns :: (BabbageEraTxBody era, EraTx era) => Tx TopTx era -> Set.Set TxIn
 allTxIns tx =
   b ^. inputsTxBodyL
     <> b ^. collateralInputsTxBodyL
@@ -110,7 +111,7 @@ allTxIns tx =
     b = tx ^. bodyTxL
 
 -- | Builds a dummy TxOut for each of the inputs.
-stubUTxO :: forall era. (BabbageEraTxBody era, EraTx era) => Tx era -> UTxO era
+stubUTxO :: forall era. (BabbageEraTxBody era, EraTx era) => Tx TopTx era -> UTxO era
 stubUTxO tx =
   UTxO . Map.fromList $
     [(i, dummyOut) | i <- Set.toList (allTxIns tx)]
@@ -121,7 +122,7 @@ stubUTxO tx =
     dummyAddr :: Addr
     dummyAddr = Addr Testnet (KeyHashObj dummyKeyHash) StakeRefNull
 
-    dummyKeyHash :: KeyHash 'Payment
+    dummyKeyHash :: KeyHash Payment
     dummyKeyHash =
       case hashFromBytes (BS.replicate 28 0) of
         Just h -> KeyHash h

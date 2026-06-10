@@ -159,7 +159,7 @@ writeRandom _ (Seed seed) (GenSize generatorSize) (NumCases numCases) = do
         snd $
           Foldable.foldl'
             ( \(prevRng, acc) chunk ->
-                let (rngL, rngR) = System.Random.split prevRng
+                let (rngL, rngR) = System.Random.splitGen prevRng
                  in (rngL, (chunk, rngR) : acc)
             )
             (QC.mkQCGen seed, [])
@@ -183,7 +183,7 @@ fairChunks total n = replicate remainder (base + 1) ++ replicate (n - remainder)
 --  purely and deterministically.
 splittingUnGen :: QC.Gen a -> QC.QCGen -> Int -> (a, QC.QCGen)
 splittingUnGen (QC.MkGen unGen) rng size =
-  let (rng1, rng2) = System.Random.split rng
+  let (rng1, rng2) = System.Random.splitGen rng
    in (unGen rng1 size, rng2)
 
 mkTestCase :: forall a. (Show a, G.OurCBOR a) => a -> TestCase a

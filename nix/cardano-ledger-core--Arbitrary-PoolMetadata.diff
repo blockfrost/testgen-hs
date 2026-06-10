@@ -1,13 +1,22 @@
 diff --git a/testlib/Test/Cardano/Ledger/Core/Arbitrary.hs b/testlib/Test/Cardano/Ledger/Core/Arbitrary.hs
-index 0da03786f..0aad0f7c8 100644
+index 0da03786f..patched 100644
 --- a/testlib/Test/Cardano/Ledger/Core/Arbitrary.hs
 +++ b/testlib/Test/Cardano/Ledger/Core/Arbitrary.hs
-@@ -482,7 +482,7 @@ instance Arbitrary PoolParams where
+@@ -91,6 +91,8 @@ import Control.Monad (replicateM)
+ import Control.Monad (replicateM)
+ import Control.Monad.Identity (Identity)
+ import Control.Monad.Trans.Fail.String (errorFail)
++import Data.Array.Byte (ByteArray (ByteArray))
++import Data.ByteString.Short.Internal (ShortByteString (SBS))
+ import Data.Foldable (toList)
+ import Data.GenValidity
+ import Data.Int (Int64)
+@@ -470,7 +472,7 @@ instance Arbitrary StakePoolState where
        <*> arbitrary
  
  instance Arbitrary PoolMetadata where
 -  arbitrary = PoolMetadata <$> arbitrary <*> arbitrary
-+  arbitrary = PoolMetadata <$> arbitrary <*> genByteString 32
++  arbitrary = PoolMetadata <$> arbitrary <*> ((\(SBS ba) -> ByteArray ba) <$> genShortByteString 32)
  
  instance Arbitrary StakePoolRelay where
    arbitrary = genericArbitraryU
